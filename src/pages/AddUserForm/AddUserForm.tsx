@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createUser } from '../../store/features/users/usersActions';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 
-const AddUserForm: React.FC = () => {
+export const AddUserForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -52,5 +52,3 @@ const AddUserForm: React.FC = () => {
     </div>
   );
 };
-
-export default AddUserForm;
