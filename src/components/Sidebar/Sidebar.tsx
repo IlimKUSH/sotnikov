@@ -72,7 +72,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export const MiniDrawer = () => {
+export const Sidebar = () => {
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {

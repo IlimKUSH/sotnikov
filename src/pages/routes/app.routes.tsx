@@ -3,7 +3,6 @@ import { Layout } from '../../components';
 import { BrowserRoute } from '../../routes/browser.route';
 import { UserList } from '../UserList';
 import { NotFound } from '../NotFound';
-import { AddUserForm } from '../AddUserForm';
 
 
 export const routes: RouteObject[] = [
@@ -23,7 +22,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: BrowserRoute.analytics,
-        element: <AddUserForm />,
+        element: <NotFound />,
       },
       {
         path: BrowserRoute.banner,

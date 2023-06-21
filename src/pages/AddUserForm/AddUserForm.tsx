@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import { FC, useState } from 'react';
 import { createUser } from '../../store/features/users/usersActions';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 
-export const AddUserForm: React.FC = () => {
+interface IAddUserFormProps {
+  handleClose: () => void;
+}
+
+export const AddUserForm: FC<IAddUserFormProps> = (props) => {
   const dispatch = useAppDispatch();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -20,6 +24,7 @@ export const AddUserForm: React.FC = () => {
     setName('');
     setEmail('');
     setPermissions('');
+    props.handleClose();
   };
 
   return (

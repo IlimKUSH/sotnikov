@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren, useState } from 'react';
 import { Box, styled } from '@mui/material';
-import { MiniDrawer ,drawerWidth } from '../Sidebar';
+import { Sidebar, drawerWidth } from '../Sidebar';
 
 
 const DashboardLayoutRoot = styled('div')(({ theme }) => ({
@@ -8,7 +8,6 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
   flex: '1 1 auto',
   maxWidth: '100%',
   paddingTop: 64,
-  overflowX: 'hidden',
   [theme.breakpoints.up('lg')]: {
     marginLeft: drawerWidth,
   },
@@ -23,8 +22,8 @@ export const Layout: FC<PropsWithChildren> = (props) => {
 
 
   return (
-    <Box maxWidth={'1440px'} margin={'0 auto'}>
-      <MiniDrawer
+    <Box maxWidth={'1440px'} margin={'0 auto'} overflow={'hidden'}>
+      <Sidebar
         // open={open}
         // onClose={handleClose}
       />
