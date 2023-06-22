@@ -1,48 +1,27 @@
-import React, { useEffect } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { fetchUsers, deleteUser } from '../../store/features/users/usersActions';
 import { RootState } from '../../store/rootReducer';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAppSelector } from '../../hooks/useAppSelector';
-import { Avatar, Box, Button, Chip, Divider, IconButton, InputAdornment, Modal, TextField, Typography, styled } from '@mui/material';
+import { Box, Divider, InputAdornment, Modal, styled } from '@mui/material';
 import { SearchIcon } from '../../components/icons/search';
-import { DotsIcon } from '../../components/icons/dots';
 import { AddUserForm } from '../AddUserForm';
 import { UserItem } from '../../components';
+import { ButtonUI } from '../../components/ui/Button';
+import { User } from '../../store/features/users/usersSlice';
+import { TextFieldUI } from '../../components/ui/TextField';
 
-const CustomBox = styled(Box)(({ theme }) => ({
+const CustomBox = styled(Box)(({
   background: '#F9FAFB',
   borderRadius: '15px',
   padding: '15px 0px',
 }));
 
-const CustomButton = styled(Button)({
-  textTransform: 'none',
-  borderRadius: '10px',
-});
-
-const CustomTextField = styled(TextField)(() => ({
-  '& .MuiInputBase-root': {
-    borderRadius: '10px',
-    width: 650,
-  },
-  '& .MuiOutlinedInput-input': {
-    padding: '7px', // Перезапись стиля внутреннего содержимого
-  },
-}));
-
-const CustomTypography = styled(Typography)(({ theme }) => ({
-  // fontFamily: 'Futura PT',
-  fontStyle: 'normal',
-  fontWeight: 600,
-  fontSize: '18px',
-  lineHeight: '20px',
-  color: '#424F5E',
-}));
-
-export const UserList: React.FC = () => {
+export const UserList: FC = () => {
   const dispatch = useAppDispatch();
   const users = useAppSelector((state: RootState) => state.users.users);
-  const [open, setOpen] = React.useState(false);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -57,9 +36,22 @@ export const UserList: React.FC = () => {
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    setFilteredUsers(users);
+  }, [users])
+
   const handleDeleteUser = (userId: number) => {
     dispatch(deleteUser(userId));
   };
+
+  const onChangeFilter = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value === '') {
+      setFilteredUsers(users);
+    } else {
+      setFilteredUsers(users.filter((user) => user.email.includes(value)));
+    }
+  }
 
   const style = {
     position: 'absolute' as 'absolute',
@@ -78,23 +70,25 @@ export const UserList: React.FC = () => {
       <Box display="flex" py={"15px"} px={"30px"} justifyContent="space-between">
         <h2>Команда</h2>
         <Box display="flex" alignItems="center" gap="10px">
-          <CustomTextField
+          <TextFieldUI
             placeholder="Поиск по Email"
+            sx={{ width: 650 }}
+            onChange={onChangeFilter}
             InputProps={{
               endAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
             }}
           />
-          <CustomButton 
+          <ButtonUI 
             variant="contained" 
             color="secondary"
             onClick={handleOpen}
           >
             Добавить пользователя
-          </CustomButton>
+          </ButtonUI>
         </Box>
       </Box>
       <Divider />
-      {users.map(user => (
+      {filteredUsers.map(user => (
         <UserItem user={user} handleDeleteUser={handleDeleteUser} />
       ))}
 
@@ -104,7 +98,7 @@ export const UserList: React.FC = () => {
         aria-labelledby="child-modal-title"
         aria-describedby="child-modal-description"
       >
-        <Box sx={{ ...style, width: 250 }}>
+        <Box sx={{ ...style }}>
           <AddUserForm handleClose={handleClose} />
         </Box>
       </Modal>
