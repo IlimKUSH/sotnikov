@@ -1,12 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { createUser } from '../../store/features/users/usersActions';
+import { createUser, updateUserDetails } from '../../store/features/users/usersActions';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { ButtonUI } from '../../components/ui/Button';
-import { TextFieldUI } from '../../components/ui/TextField';
 import { Box, Typography } from '@mui/material';
-import { MultipleSelect } from '../../components/ui/MultiSelect';
 import { ACCESS_PERMISSION } from '../../constants';
-import { updateUser } from '../../store/features/users/usersSlice';
+import { User } from '../../store/features/users/usersSlice';
+import { ButtonUI, MultipleSelect, TextFieldUI } from '../../components/ui';
 
 interface IAddUserFormProps {
   handleClose: () => void;
@@ -34,6 +32,7 @@ export const AddUserForm: FC<IAddUserFormProps> = ({ handleClose, editMode = fal
       setName(user.name);
       setEmail(user.email);
       setPermissions(user.permissions);
+      setPreviewImage(user.image);
     }
   }, [editMode, user]);
 
@@ -56,6 +55,10 @@ export const AddUserForm: FC<IAddUserFormProps> = ({ handleClose, editMode = fal
     if (!email) {
       formIsValid = false;
       newErrors.email = 'Заполните почту';
+    } 
+    else if (!/\S+@\S+\.\S+/.test(email)) {
+      formIsValid = false;
+      newErrors.email = 'Некорректный формат почты';
     }
 
     if (permissions.length === 0) {
@@ -77,7 +80,7 @@ export const AddUserForm: FC<IAddUserFormProps> = ({ handleClose, editMode = fal
       };
 
       if (editMode && user) {
-        dispatch(updateUser({ id: user.id, userData }));
+        dispatch(updateUserDetails({ id: user.id, ...userData }));
       } else {
         dispatch(createUser(userData));
       }
@@ -119,6 +122,7 @@ export const AddUserForm: FC<IAddUserFormProps> = ({ handleClose, editMode = fal
           type="text"
           placeholder="Имя"
           value={name}
+          disabled={editMode}
           onChange={e => setName(e.target.value)}
           error={!!errors?.name}
           helperText={errors?.name}
@@ -127,27 +131,28 @@ export const AddUserForm: FC<IAddUserFormProps> = ({ handleClose, editMode = fal
           type="email"
           placeholder="Почта"
           value={email}
+          disabled={editMode}
           onChange={e => setEmail(e.target.value)}
           error={!!errors?.email}
           helperText={errors?.email}
         />
-        {editMode && (
-          <MultipleSelect
-            label="Выберите права доступа"
-            options={ACCESS_PERMISSION}
-            onChange={onChange}
-            error={!!errors?.permissions}
-          />
-        )}
+        <MultipleSelect
+          label="Выберите права доступа"
+          value={permissions}
+          options={ACCESS_PERMISSION}
+          onChange={onChange}
+          error={!!errors?.permissions}
+        />
         {errors?.permissions && <Typography ml={2} color="red" fontSize={12}>{errors.permissions}</Typography>}
         <TextFieldUI 
           type="file" 
+          disabled={editMode}
           onChange={handleImageChange} 
           error={!!errors?.image}
           helperText={errors?.image}
         />
         {previewImage && <img src={previewImage} alt="Preview" style={{ objectFit: 'contain' }} height={250} />}
-        <ButtonUI 
+        <ButtonUI
           type="submit"
           variant="contained" 
           color="secondary"

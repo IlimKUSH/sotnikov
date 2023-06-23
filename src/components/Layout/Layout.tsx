@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useState } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { Box, styled } from '@mui/material';
 import { Sidebar, drawerWidth } from '../Sidebar';
 
@@ -10,23 +10,18 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
   paddingTop: 64,
   [theme.breakpoints.up('lg')]: {
     marginLeft: drawerWidth,
+    paddingTop: 0,
+  },
+
+  '@media (max-width: 800px)': {
+    paddingTop: '0',
   },
 }));
 
 export const Layout: FC<PropsWithChildren> = (props) => {
-  const [open, setOpen] = useState(false);
-
-
-  const handleOpen = (): void => setOpen((prev) => !prev);
-  const handleClose = (): void => setOpen(false);
-
-
   return (
     <Box maxWidth={'1440px'} margin={'0 auto'} overflow={'hidden'}>
-      <Sidebar
-        // open={open}
-        // onClose={handleClose}
-      />
+      <Sidebar />
 
       <DashboardLayoutRoot>
         <Box
@@ -35,7 +30,7 @@ export const Layout: FC<PropsWithChildren> = (props) => {
             flex: '1 1 auto',
             flexDirection: 'column',
             width: '100%',
-            height: 'calc(100vh - 64px)',
+            height: '100vh',
           }}
         >
           {props.children}

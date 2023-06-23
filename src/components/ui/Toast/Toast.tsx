@@ -16,25 +16,48 @@ const style = {
 };
 
 interface IToastUIProps {
-    title?: string;
+    title: string;
     open: boolean;
-    children: ReactNode;
+    children?: ReactNode;
     onClose: () => void;
 }
 
-export const ModalUI: FC<IToastUIProps> = ({ title, children, open, onClose }) => {
+export const ToastUI: FC<IToastUIProps> = ({ title, open, onClose }) => {
+  const [visible, setVisible] = useState(open);
+
+  useEffect(() => {
+    if (open) {
+      setVisible(true);
+      const timer = setTimeout(() => {
+        onClose();
+    }, 3000);
+
+    return () => clearTimeout(timer);
+    } else {
+      setVisible(false);
+    }
+  }, [open, onClose]);
+
+  const handleCloseModal = () => {
+    setVisible(false);
+    onClose();
+  };
+
   return (
     <Modal
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
       open={open}
-      onClose={onClose}
+      onClose={handleCloseModal}
+
     >
-      <Box sx={style}>
+      <Box sx={{ ...style, transition: 'opacity 0.5s', opacity: visible ? 1 : 0 }}>
         <Typography textAlign="center"  variant="h6" fontWeight={600} id="modal-title" mb={2}>
           {title}
         </Typography>
-        {children}
+        <ButtonUI variant="contained" color="secondary" fullWidth onClick={onClose}>
+          Закрыть
+        </ButtonUI>
       </Box>
     </Modal>
   )

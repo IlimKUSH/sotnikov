@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -22,12 +22,13 @@ const MenuProps = {
 
 interface IMultipleSelectProps extends Omit<SelectProps<string[]>, 'label' | 'onChange' | 'value'> {
   label?: string;
+  value: string[];
   options: string[];
   onChange: (selected: string[]) => void;
 }
 
 export const MultipleSelect: FC<IMultipleSelectProps> = (props) => {
-  const { label, options, onChange, ...others} = props;
+  const { label, options, value, onChange, ...others} = props;
 
   const [selected, setSelect] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState<boolean>(false);
@@ -53,6 +54,10 @@ export const MultipleSelect: FC<IMultipleSelectProps> = (props) => {
     setSelect(updatedSelected);
     onChange(updatedSelected);
   };
+
+  useEffect(() => {
+    setSelect(value);
+  }, [value])
 
   return (
     <FormControl fullWidth>

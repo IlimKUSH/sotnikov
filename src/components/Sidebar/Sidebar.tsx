@@ -21,6 +21,7 @@ import { LogoIcon } from '../icons/logo';
 import { useMediaQuery, Theme, Avatar } from '@mui/material';
 import { sidebarItems } from './utils';
 import { SidebarItem } from './SidebarItem';
+import { Link } from 'react-router-dom';
 
 export const drawerWidth = 240;
 
@@ -85,20 +86,34 @@ export const Sidebar = () => {
   });
 
   return (
-    <Drawer variant={isLgUp ? 'permanent' : 'temporary'} open={open}>
+    <Drawer
+      anchor="left"
+      onClose={handleDrawerToggle}
+      open={open}
+      PaperProps={{
+        sx: {
+          backgroundColor: 'neutral.900',
+          color: '#FFFFFF',
+          width: 280,
+        },
+      }}
+      variant={isLgUp ? 'permanent' : 'temporary'}
+    >   
+      <Link to="/">
         <DrawerHeader>
           <LogoIcon />
         </DrawerHeader>
-        <List>
-          <Avatar sx={{ margin: '0 auto 10px', width: 60, height: 60 }} src='https://cdn.pixabay.com/photo/2015/06/22/08/40/child-817373_1280.jpg' />
-          {sidebarItems.map((item) => (
-            <SidebarItem
-              key={item.title}
-              open={open}
-              {...item}
-            />
-          ))}
-        </List>
+      </Link>
+      <List>
+        <Avatar sx={{ margin: '0 auto 10px', width: 60, height: 60 }} src='https://cdn.pixabay.com/photo/2015/06/22/08/40/child-817373_1280.jpg' />
+        {sidebarItems.map((item) => (
+          <SidebarItem
+            key={item.title}
+            open={open}
+            {...item}
+          />
+        ))}
+      </List>
     </Drawer>
   );
 }

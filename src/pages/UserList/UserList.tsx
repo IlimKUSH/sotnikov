@@ -3,18 +3,23 @@ import { fetchUsers, deleteUser } from '../../store/features/users/usersActions'
 import { RootState } from '../../store/rootReducer';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAppSelector } from '../../hooks/useAppSelector';
-import { Box, Divider, InputAdornment, Modal, styled } from '@mui/material';
+import { Box, Divider, IconButton, InputAdornment, Modal, Theme, Typography, styled, useMediaQuery } from '@mui/material';
 import { SearchIcon } from '../../components/icons/search';
 import { AddUserForm } from '../AddUserForm';
 import { UserItem } from '../../components';
-import { ButtonUI } from '../../components/ui/Button';
 import { User } from '../../store/features/users/usersSlice';
-import { TextFieldUI } from '../../components/ui/TextField';
+import { ButtonUI, TextFieldUI } from '../../components/ui';
+import { BurgerIcon } from '../../components/icons/burger';
 
 const CustomBox = styled(Box)(({
   background: '#F9FAFB',
   borderRadius: '15px',
   padding: '15px 0px',
+  margin: '0px 40px',
+
+  '@media (max-width: 800px)': {
+    margin: '0',
+  },
 }));
 
 export const UserList: FC = () => {
@@ -67,19 +72,43 @@ export const UserList: FC = () => {
 
   return (
     <CustomBox>
-      <Box display="flex" py={"15px"} px={"30px"} justifyContent="space-between">
-        <h2>Команда</h2>
-        <Box display="flex" alignItems="center" gap="10px">
+      <Box 
+        display="flex" 
+        justifyContent="space-between"
+        py={"15px"} 
+        px={"30px"} 
+        sx={{
+          flexDirection: { xs: 'column', md: 'row' },
+          '@media (max-width: 800px)': {
+            px: '10px',
+          },
+        }}
+      >
+        <Box display="flex" alignItems="center" gap="5px" pb={1}>
+          <IconButton sx={{ display: { sm: 'none' } }}><BurgerIcon /></IconButton> 
+          <Typography variant="h4">Команда</Typography>
+        </Box>
+        <Box 
+          flex={0.8} 
+          display="flex" 
+          alignItems="center" 
+          gap="10px"
+          sx={{
+            width: { md: '100%', lg: '40%'},
+            flexDirection: { xs: 'column', md: 'row' },
+          }}
+        >
           <TextFieldUI
             placeholder="Поиск по Email"
-            sx={{ width: 650 }}
+            sx={{ flex: 1, width: { xs: '100%', md: '40%'} }}
             onChange={onChangeFilter}
             InputProps={{
               endAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
             }}
           />
-          <ButtonUI 
+          <ButtonUI
             variant="contained" 
+            sx={{ width: { xs: '100%', md: '30%'} }}
             color="secondary"
             onClick={handleOpen}
           >
@@ -88,9 +117,11 @@ export const UserList: FC = () => {
         </Box>
       </Box>
       <Divider />
-      {filteredUsers.map(user => (
-        <UserItem user={user} handleDeleteUser={handleDeleteUser} />
-      ))}
+      <Box overflow='hidden' sx={{ height: '100vh', overflowY: 'scroll' }}>
+        {filteredUsers.map(user => (
+          <UserItem user={user} handleDeleteUser={handleDeleteUser} />
+        ))}
+      </Box>
 
       <Modal
         open={open}

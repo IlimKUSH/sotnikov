@@ -9,11 +9,9 @@ export const routes: RouteObject[] = [
   {
     path: '/',
     element: (
-      // <Auth>
-        <Layout>
-          <Outlet />
-        </Layout>
-      // </Auth>
+      <Layout>
+        <Outlet />
+      </Layout>
     ),
     children: [
       {

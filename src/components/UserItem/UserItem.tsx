@@ -3,7 +3,9 @@ import { Avatar, Typography, Chip, IconButton, styled, Menu, MenuItem } from '@m
 import { Box } from '@mui/system'
 import { DotsIcon } from '../icons/dots'
 import { User } from '../../store/features/users/usersSlice'
-import { ModalUI } from '../ui/Modal'
+import { AddUserForm } from '../../pages'
+import { ModalUI } from '../ui/Modal/Modal'
+import { ToastUI } from '../ui'
 
 enum ModalMessageType {
   ResendCode = 'resend-code',
@@ -26,6 +28,15 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
 export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [modalMessageType, setModalMessageType] = useState<ModalMessageType | null>(null);
+  const [open, setOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    handleCloseMenu();
+    setOpen(true);
+  };
+  const handleCloseModal = () => {
+    setOpen(false);
+  };
 
   const handleOpen = (messageType: ModalMessageType) => {
     setModalMessageType(messageType);
@@ -50,8 +61,24 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
     handleOpen(ModalMessageType.UserDeleted);
   }
 
+  const CustomBox = styled(Box)(({
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: '11px',
+    '&:hover': {
+      background: '#EFEFF6',
+      cursor: 'hover',
+    },
+    padding: '18px 30px',
+  
+    '@media (max-width: 800px)': {
+      padding: '18px 10px',
+    },
+  }));
+
   return (
-    <Box key={user.id} sx={{ "&:hover": { background: '#EFEFF6', cursor: 'hover' }}} py={"18px"} px={"30px"} display="flex" alignItems={"center"} justifyContent={"space-between"} gap={"11px"}>
+    <CustomBox key={user.id}>
       <Box display="flex" gap={"11px"} alignItems={"center"}>
         <Avatar src={user.image } alt={user.name} sx={{ width: 64, height: 64 }} />
         <Box>
@@ -59,7 +86,13 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
             <CustomTypography>{user.name}</CustomTypography>
             <Typography fontWeight={400} fontSize={18} color={"#9494A0"}>{user.email}</Typography>
           </Box>
-          <p>{user.permissions.map((permission) => <Chip label={permission} variant="outlined"  sx={{ borderRadius: "10px", fontSize: "16px", mr: "5px", color: "#9494A0" }} />)}</p>
+          <p style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>{user.permissions.map((permission) => {
+            const isAdmin = permission === 'Администратор';
+            return (
+              <Chip label={permission} variant="outlined" color={!!isAdmin ? 'primary' : 'default'}  sx={{ borderRadius: "10px", fontSize: "16px", color: isAdmin ? '' : '#9494A0'  }} />)}
+            )
+          }
+          </p>
         </Box>
       </Box>
       <IconButton 
@@ -75,20 +108,28 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
       >
-        <MenuItem onClick={handleCloseMenu}>Изменить права доступа</MenuItem>
+        {!user.permissions.includes('Администратор') && <MenuItem onClick={handleOpenModal}>Изменить права доступа</MenuItem>}
         <MenuItem onClick={() => handleOpen(ModalMessageType.ResendCode)}>Отправить код повторно</MenuItem>
         <MenuItem onClick={() => handleDelete(user.id)}>Удалить</MenuItem>
       </Menu>
 
-      <ModalUI
+      <ToastUI
         open={modalMessageType !== null}
         title={
           modalMessageType === ModalMessageType.ResendCode
             ? `Приглашение отправлено на почту ${user.email}`
             : 'Пользователь успешно удален'
         }
-        handleClose={handleClose}
+        onClose={handleClose}
       />
-    </Box>
+      <ModalUI
+        open={open}
+        onClose={handleCloseModal}
+      >
+        <Box>
+          <AddUserForm handleClose={handleCloseModal} editMode user={user} />
+        </Box>
+      </ModalUI>
+    </CustomBox>
   )
 }
