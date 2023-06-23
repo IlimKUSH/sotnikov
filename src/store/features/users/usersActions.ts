@@ -1,22 +1,29 @@
-import { setUsers, addUser, removeUser, updateUser, User } from './usersSlice';
+import { setUsers, addUser, removeUser, updateUser, User, setLoading } from './usersSlice';
 import { AppDispatch } from '../..';
 import axios from 'axios';
 
-
 export const fetchUsers = () => async(dispatch: AppDispatch) => {
-  // Имитация асинхронной загрузки данных
-  const response = await axios('http://localhost:3001/users');
+  const response = await axios(`${process.env.REACT_APP_BASE_URL}/users`);
   const users = response.data;
-  
+
+  dispatch(setLoading(true));
+
   setTimeout(() => {
     dispatch(setUsers(users));
-  }, 500);
+    dispatch(setLoading(false));
+  }, 1000);
 };
 
 export const createUser = (user: Omit<User, 'id'>) => (dispatch: AppDispatch) => {
   const id = Date.now();
   const newUser: User = { id, ...user };
-  dispatch(addUser(newUser));
+
+  dispatch(setLoading(true));
+
+  setTimeout(() => {
+    dispatch(addUser(newUser));
+    dispatch(setLoading(false));
+  }, 1000);
 };
 
 export const deleteUser = (userId: number) => (dispatch: AppDispatch) => {
@@ -24,5 +31,10 @@ export const deleteUser = (userId: number) => (dispatch: AppDispatch) => {
 };
 
 export const updateUserDetails = (user: User) => (dispatch: AppDispatch) => {
-  dispatch(updateUser(user));
+  dispatch(setLoading(true));
+
+  setTimeout(() => {
+    dispatch(updateUser(user));
+    dispatch(setLoading(false));
+  }, 1000);
 };

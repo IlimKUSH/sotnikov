@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { Box, Typography } from '@mui/material';
 import { ACCESS_PERMISSION } from '../../constants';
 import { User } from '../../store/features/users/usersSlice';
-import { ButtonUI, MultipleSelect, TextFieldUI } from '../../components/ui';
+import { ButtonUI, MultipleSelect, TextFieldUI } from '../ui';
 
 interface IAddUserFormProps {
   handleClose: () => void;

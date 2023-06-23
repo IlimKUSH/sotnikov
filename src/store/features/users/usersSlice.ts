@@ -10,10 +10,12 @@ export interface User {
 
 interface UsersState {
   users: User[];
+  loading: boolean;
 }
 
 const initialState: UsersState = {
   users: [],
+  loading: true,
 };
 
 const usersSlice = createSlice({
@@ -42,9 +44,12 @@ const usersSlice = createSlice({
         };
       }
     },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
   },
 });
 
-export const { setUsers, addUser, removeUser, updateUser } = usersSlice.actions;
+export const { setUsers, setLoading, addUser, removeUser, updateUser } = usersSlice.actions;
 
 export default usersSlice.reducer;

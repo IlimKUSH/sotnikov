@@ -61,7 +61,7 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
     handleOpen(ModalMessageType.UserDeleted);
   }
 
-  const CustomBox = styled(Box)(({
+  const styleBox = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -75,10 +75,10 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
     '@media (max-width: 800px)': {
       padding: '18px 10px',
     },
-  }));
+  };
 
   return (
-    <CustomBox key={user.id}>
+    <Box key={user.id} sx={styleBox}>
       <Box display="flex" gap={"11px"} alignItems={"center"}>
         <Avatar src={user.image } alt={user.name} sx={{ width: 64, height: 64 }} />
         <Box>
@@ -130,6 +130,6 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
           <AddUserForm handleClose={handleCloseModal} editMode user={user} />
         </Box>
       </ModalUI>
-    </CustomBox>
+    </Box>
   )
 }

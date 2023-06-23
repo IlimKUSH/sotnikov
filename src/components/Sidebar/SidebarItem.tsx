@@ -13,31 +13,35 @@ export interface ISidebarItemProps {
 export const SidebarItem: FC<ISidebarItemProps> = (props) => {
   const { href, icon, title, open } = props;
 
-  // const { pathname } = useLocation();
-  // const active = href ? (pathname === href) : false;
+  const { pathname } = useLocation();
+  const active = href ? (pathname === href) : false;
 
   return (
     <NavLink to={href}>
-      <ListItem sx={{ display: 'block', padding: 0.6 }}>
-        <ListItemButton
-        sx={{
-            minHeight: 48,
-            justifyContent: open ? 'initial' : 'center',
-            px: 2.5,
-        }}
+      {({ isActive }) => (
+        <ListItem 
+          sx={{ display: 'block', padding: 0.6, bgcolor: isActive ? '#EFEFF6' : ''  }}
         >
-        <ListItemIcon
+          <ListItemButton
             sx={{
-            minWidth: open ? 'auto' : 100,
-            mr: open ? 3 : 'auto',
-            justifyContent: 'center',
+              minHeight: 48,
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
             }}
-        >
-            {icon}
-        </ListItemIcon>
-        <ListItemText primary={title} sx={{ opacity: open ? 1 : 0 }} />
-        </ListItemButton>
-      </ListItem>
+          >
+            <ListItemIcon
+              sx={{
+              minWidth: open ? 'auto' : 100,
+              mr: open ? 3 : 'auto',
+              justifyContent: 'center',
+              }}
+            >
+              {icon}
+            </ListItemIcon>
+            <ListItemText primary={title} sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+        </ListItem>
+      )}
     </NavLink>
   );
 };

@@ -1,6 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material"
-import { FC, ReactNode, useEffect, useState } from "react";
-import { ButtonUI } from "../Button";
+import { FC, ReactNode } from "react";
 
 const style = {
     position: 'absolute',

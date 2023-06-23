@@ -5,11 +5,13 @@ import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { Box, Divider, IconButton, InputAdornment, Modal, Theme, Typography, styled, useMediaQuery } from '@mui/material';
 import { SearchIcon } from '../../components/icons/search';
-import { AddUserForm } from '../AddUserForm';
+import { AddUserForm } from '../../components/AddUserForm';
 import { UserItem } from '../../components';
 import { User } from '../../store/features/users/usersSlice';
+import { ModalUI } from '../../components/ui/Modal/Modal';
 import { ButtonUI, TextFieldUI } from '../../components/ui';
 import { BurgerIcon } from '../../components/icons/burger';
+import { LoaderUI } from '../../components/ui/Loader';
 
 const CustomBox = styled(Box)(({
   background: '#F9FAFB',
@@ -24,7 +26,7 @@ const CustomBox = styled(Box)(({
 
 export const UserList: FC = () => {
   const dispatch = useAppDispatch();
-  const users = useAppSelector((state: RootState) => state.users.users);
+  const { users, loading } = useAppSelector((state: RootState) => state.users);
   const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
   const [open, setOpen] = useState(false);
 
@@ -58,25 +60,12 @@ export const UserList: FC = () => {
     }
   }
 
-  const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
-
   return (
     <CustomBox>
       <Box 
         display="flex" 
         justifyContent="space-between"
-        py={"15px"} 
-        px={"30px"} 
+        p={"15px 30px"}
         sx={{
           flexDirection: { xs: 'column', md: 'row' },
           '@media (max-width: 800px)': {
@@ -117,22 +106,24 @@ export const UserList: FC = () => {
         </Box>
       </Box>
       <Divider />
+      {loading && <LoaderUI />}
+
       <Box overflow='hidden' sx={{ height: '100vh', overflowY: 'scroll' }}>
         {filteredUsers.map(user => (
           <UserItem user={user} handleDeleteUser={handleDeleteUser} />
         ))}
       </Box>
 
-      <Modal
+      <ModalUI
         open={open}
         onClose={handleClose}
-        aria-labelledby="child-modal-title"
-        aria-describedby="child-modal-description"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
       >
-        <Box sx={{ ...style }}>
+        <Box>
           <AddUserForm handleClose={handleClose} />
         </Box>
-      </Modal>
+      </ModalUI>
     </CustomBox>
   );
 };
