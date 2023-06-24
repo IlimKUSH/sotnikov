@@ -3,7 +3,7 @@ import { fetchUsers, deleteUser } from '../../store/features/users/usersActions'
 import { RootState } from '../../store/rootReducer';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAppSelector } from '../../hooks/useAppSelector';
-import { Box, Divider, IconButton, InputAdornment, Modal, Theme, Typography, styled, useMediaQuery } from '@mui/material';
+import { Box, Divider, IconButton, InputAdornment, Typography, styled } from '@mui/material';
 import { SearchIcon } from '../../components/icons/search';
 import { AddUserForm } from '../../components/AddUserForm';
 import { UserItem } from '../../components';
@@ -17,7 +17,7 @@ const CustomBox = styled(Box)(({
   background: '#F9FAFB',
   borderRadius: '15px',
   padding: '15px 0px',
-  margin: '0px 40px',
+  margin: '40px',
 
   '@media (max-width: 800px)': {
     margin: '0',
@@ -67,7 +67,7 @@ export const UserList: FC = () => {
         justifyContent="space-between"
         p={"15px 30px"}
         sx={{
-          flexDirection: { xs: 'column', md: 'row' },
+          flexDirection: { xs: 'column', sm: 'row' },
           '@media (max-width: 800px)': {
             px: '10px',
           },
@@ -84,12 +84,12 @@ export const UserList: FC = () => {
           gap="10px"
           sx={{
             width: { md: '100%', lg: '40%'},
-            flexDirection: { xs: 'column', md: 'row' },
+            flexDirection: { xs: 'column', sm: 'row' },
           }}
         >
           <TextFieldUI
             placeholder="Поиск по Email"
-            sx={{ flex: 1, width: { xs: '100%', md: '40%'} }}
+            sx={{ flex: 1, width: { xs: '100%', sm: '40%'} }}
             onChange={onChangeFilter}
             InputProps={{
               endAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
@@ -97,7 +97,7 @@ export const UserList: FC = () => {
           />
           <ButtonUI
             variant="contained" 
-            sx={{ width: { xs: '100%', md: '30%'} }}
+            sx={{ width: { xs: '100%', sm: '30%'}, textWrap: 'nowrap' }}
             color="secondary"
             onClick={handleOpen}
           >
@@ -108,7 +108,7 @@ export const UserList: FC = () => {
       <Divider />
       {loading && <LoaderUI />}
 
-      <Box overflow='hidden' sx={{ height: '100vh', overflowY: 'scroll' }}>
+      <Box overflow='hidden' sx={{ maxHeight: '500px', overflowY: 'scroll' }}>
         {filteredUsers.map(user => (
           <UserItem user={user} handleDeleteUser={handleDeleteUser} />
         ))}

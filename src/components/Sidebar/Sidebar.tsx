@@ -8,7 +8,7 @@ import { sidebarItems } from './utils';
 import { SidebarItem } from './SidebarItem';
 import { Link } from 'react-router-dom';
 
-export const drawerWidth = 240;
+export const drawerWidth = 100;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,

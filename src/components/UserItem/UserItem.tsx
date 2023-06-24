@@ -40,7 +40,6 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
 
   const handleOpen = (messageType: ModalMessageType) => {
     setModalMessageType(messageType);
-    handleCloseMenu();
   };
 
   const handleClose = () => {
@@ -57,8 +56,8 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
 
   const handleDelete = (userId: number) => {
     handleDeleteUser(userId);
-    handleCloseMenu();
     handleOpen(ModalMessageType.UserDeleted);
+    handleCloseMenu();
   }
 
   const styleBox = {

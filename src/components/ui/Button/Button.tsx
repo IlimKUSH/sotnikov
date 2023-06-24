@@ -6,6 +6,7 @@ const CustomButton = styled(Button)({
     borderRadius: '10px',
     fontSize: '18px',
     height: '36px',
+    minWidth: 'fit-content',
   });
 
 export const ButtonUI: FC<ButtonProps> = ({ children, ...props }) => {

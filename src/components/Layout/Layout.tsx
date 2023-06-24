@@ -4,18 +4,19 @@ import { Sidebar, drawerWidth } from '../Sidebar';
 
 
 const DashboardLayoutRoot = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flex: '1 1 auto',
-  maxWidth: '100%',
-  paddingTop: 64,
+  // display: 'flex',
+  // flexDirection: 'column',
+  // flex: '1 1 auto',
+  // maxWidth: '100%',
+  // paddingTop: 64,
   [theme.breakpoints.up('lg')]: {
     marginLeft: drawerWidth,
     paddingTop: 0,
   },
 
-  '@media (max-width: 800px)': {
-    paddingTop: '0',
-  },
+  // '@media (max-width: 800px)': {
+  //   paddingTop: '0',
+  // },
 }));
 
 export const Layout: FC<PropsWithChildren> = (props) => {
