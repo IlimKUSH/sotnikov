@@ -38,5 +38,78 @@
             "Обращение клиентов"
         ],
         "image": "https://gorodprizrak.com/wp-content/uploads/2021/01/346545.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Айжулдыз Кошкинбай",
+        "email": "aizhzk@gmail.com",
+        "permissions": [
+            "Обращение клиентов"
+        ],
+        "image": "https://static.tildacdn.com/tild6434-3966-4165-a137-306431323265/4.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Каныкей Кошкинбай",
+        "email": "kani@mail.ru",
+        "permissions": [
+            "Блог",
+            "Обращение клиентов"
+        ],
+        "image": "https://content-online.ru/ckfinder/userfiles/files/Portretnoe-foto1.jpg"
+    },
+    {
+        "id": 7,
+        "name": "Мария Великая",
+        "email": "mari123@gmail.com",
+        "permissions": [
+            "Обращение клиентов"
+        ],
+        "image": "https://gorodprizrak.com/wp-content/uploads/2021/01/346545.jpg"
+    },
+    {
+        "id": 8,
+        "name": "Ибраим Ношев",
+        "email": "ibragim@mail.ru",
+        "permissions": [
+            "Аналитика"
+        ],
+        "image": "https://i.pinimg.com/originals/3f/20/7c/3f207cedc0a28a24ce344483bfe91b8c.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Вера Брежнева",
+        "email": "veraBrejneva@gmail.com",
+        "permissions": [
+            "Модерация объявлений"
+        ],
+        "image": "https://gorodovoy.ru/k2/news/canvas/577x320/upload//upload/news/471514932840.jpg"
+    },
+    {
+        "id": 10,
+        "name": "Айжулдыз Кошкинбай",
+        "email": "aizhzk@gmail.com",
+        "permissions": [
+            "Обращение клиентов"
+        ],
+        "image": "https://gorodprizrak.com/wp-content/uploads/2021/01/346545.jpg"
+    },
+    {
+        "id": 11,
+        "name": "Айжулдыз Кошкинбай",
+        "email": "aizhzk@gmail.com",
+        "permissions": [
+            "Обращение клиентов"
+        ],
+        "image": "https://gorodprizrak.com/wp-content/uploads/2021/01/346545.jpg"
+    },
+    {
+        "id": 12,
+        "name": "Айжулдыз Кошкинбай",
+        "email": "aizhzk@gmail.com",
+        "permissions": [
+            "Обращение клиентов"
+        ],
+        "image": "https://gorodprizrak.com/wp-content/uploads/2021/01/346545.jpg"
     }]
 }
