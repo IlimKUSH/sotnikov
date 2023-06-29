@@ -1,8 +1,10 @@
-import { Outlet, RouteObject } from 'react-router-dom';
+import {Navigate, Outlet, RouteObject} from 'react-router-dom';
 import { Layout } from '../../components';
 import { BrowserRoute } from '../../routes/browser.route';
-import { UserList } from '../UserList';
 import { NotFound } from '../NotFound';
+import {PostList} from "../PostList";
+import {BackendRoutes} from "../../routes/backed.route";
+import {PhotoList} from "../PhotoList";
 
 
 export const routes: RouteObject[] = [
@@ -16,40 +18,24 @@ export const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <UserList />,
+        element: <Navigate to={BrowserRoute.posts} />,
       },
       {
-        path: BrowserRoute.analytics,
-        element: <NotFound />,
+        path: BrowserRoute.posts,
+        element: <PostList />,
       },
       {
-        path: BrowserRoute.banner,
-        element: <NotFound />,
+        path: BrowserRoute.photos,
+        element: <PhotoList />,
       },
       {
-        path: BrowserRoute.blog,
-        element: <NotFound />,
+        path: BrowserRoute.tasks,
+        element: <PostList />,
       },
-      {
-        path: BrowserRoute.chats,
-        element: <NotFound />,
-      },
-      {
-        path: BrowserRoute.profile,
-        element: <NotFound />,
-      },
-      {
-        path: BrowserRoute.team,
-        element: <UserList />,
-      },
-      {
-        path: BrowserRoute.currency,
-        element: <NotFound />,
-      },
-      {
-        path: BrowserRoute.moderation,
-        element: <NotFound />,
-      },
+      // {
+      //   path: BrowserRoute.analytics,
+      //   element: <NotFound />,
+      // },
     ],
   },
 ];

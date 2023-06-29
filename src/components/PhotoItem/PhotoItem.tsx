@@ -2,19 +2,19 @@ import { FC, MouseEvent, useState } from 'react'
 import { Avatar, Typography, Chip, IconButton, styled, Menu, MenuItem } from '@mui/material'
 import { Box } from '@mui/system'
 import { DotsIcon } from '../icons/dots'
-import { User } from '../../store/features/users/usersSlice'
 import { AddUserForm } from '../../pages'
 import { ModalUI } from '../ui/Modal/Modal'
 import { ToastUI } from '../ui'
+import {Album} from "../../store/features/albums/albumsSlice";
 
 enum ModalMessageType {
   ResendCode = 'resend-code',
   UserDeleted = 'user-deleted',
 }
 
-interface IUserItemProps {
-  user: User;
-  handleDeleteUser: (userId: number) => void;
+interface IPhotoItemProps {
+  album: Album;
+  handleDeleteAlbum: (albumId: number) => void;
 }
 
 const CustomTypography = styled(Typography)(({ theme }) => ({
@@ -25,7 +25,7 @@ const CustomTypography = styled(Typography)(({ theme }) => ({
     color: '#424F5E',
   }));
 
-export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
+export const PhotoItem: FC<IPhotoItemProps> = ({ album, handleDeleteAlbum }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [modalMessageType, setModalMessageType] = useState<ModalMessageType | null>(null);
   const [open, setOpen] = useState(false);
@@ -54,10 +54,9 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
     setAnchorEl(null);
   };
 
-  const handleDelete = (userId: number) => {
-    handleDeleteUser(userId);
+  const handleDelete = (albumId: number) => {
+    handleDeleteAlbum(albumId);
     handleOpen(ModalMessageType.UserDeleted);
-    handleCloseMenu();
   }
 
   const styleBox = {
@@ -70,31 +69,21 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
       cursor: 'hover',
     },
     padding: '18px 30px',
-  
+
     '@media (max-width: 800px)': {
       padding: '18px 10px',
     },
   };
 
   return (
-    <Box key={user.id} sx={styleBox}>
+    <Box key={album.id} sx={styleBox}>
       <Box display="flex" gap={"11px"} alignItems={"center"}>
-        <Avatar src={user.image } alt={user.name} sx={{ width: 64, height: 64 }} />
-        <Box>
-          <Box display="flex" gap={"11px"} alignItems={"center"} mb={0.7}>
-            <CustomTypography>{user.name}</CustomTypography>
-            <Typography fontWeight={400} fontSize={18} color={"#9494A0"}>{user.email}</Typography>
-          </Box>
-          <p style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>{user.permissions.map((permission) => {
-            const isAdmin = permission === 'Администратор';
-            return (
-              <Chip label={permission} variant="outlined" color={!!isAdmin ? 'primary' : 'default'}  sx={{ borderRadius: "10px", fontSize: "16px", color: isAdmin ? '' : '#9494A0'  }} />)}
-            )
-          }
-          </p>
+        <Box mb={0.7}>
+          <CustomTypography>{album.username}</CustomTypography>
+          <CustomTypography>{album.title}</CustomTypography>
         </Box>
       </Box>
-      <IconButton 
+      <IconButton
         sx={{ alignSelf: 'flex-start' }}
         onClick={handleClick}
       >
@@ -107,26 +96,21 @@ export const UserItem: FC<IUserItemProps> = ({ user, handleDeleteUser }) => {
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
       >
-        {!user.permissions.includes('Администратор') && <MenuItem onClick={handleOpenModal}>Изменить права доступа</MenuItem>}
-        <MenuItem onClick={() => handleOpen(ModalMessageType.ResendCode)}>Отправить код повторно</MenuItem>
-        <MenuItem onClick={() => handleDelete(user.id)}>Удалить</MenuItem>
+        <MenuItem onClick={() => handleDelete(album.id)}>Удалить</MenuItem>
       </Menu>
 
       <ToastUI
         open={modalMessageType !== null}
-        title={
-          modalMessageType === ModalMessageType.ResendCode
-            ? `Приглашение отправлено на почту ${user.email}`
-            : 'Пользователь успешно удален'
-        }
+        title={'Пользователь успешно удален'}
         onClose={handleClose}
+        onOk={() => handleDelete(album.id)}
       />
       <ModalUI
         open={open}
         onClose={handleCloseModal}
       >
         <Box>
-          <AddUserForm handleClose={handleCloseModal} editMode user={user} />
+          <AddUserForm handleClose={handleCloseModal} editMode data={album} />
         </Box>
       </ModalUI>
     </Box>

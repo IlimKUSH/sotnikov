@@ -1,8 +1,24 @@
-export const ACCESS_PERMISSION = [
-  'Модерация объявлений',
-  'Блог',
-  'Тех. поддержка',
-  'Обращения клиентов',
-  'Аналитика',
-  'Акции',
+import {IOption} from "./utils";
+
+export const LIMITS: IOption[] = [
+  {
+    label: 10,
+    value: 10
+  },
+  {
+    label: 20,
+    value: 20
+  },
+  {
+    label: 50,
+    value: 50
+  },
+  {
+    label: 100,
+    value: 100
+  },
+  {
+    label: 'Все',
+    value: -1
+  }
 ];

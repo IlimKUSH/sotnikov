@@ -113,7 +113,7 @@ export const theme = createTheme({
     '0px 25px 50px rgba(100, 116, 139, 0.25)',
   ],
   typography: {
-    fontFamily: 'Futura PT',
+    fontFamily: '\'Trebuchet MS\', Helvetica, sans-serif',
 
     body1: {
       fontSize: '1rem',

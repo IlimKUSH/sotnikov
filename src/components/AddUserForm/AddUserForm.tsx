@@ -1,114 +1,82 @@
-import { FC, useEffect, useState } from 'react';
-import { createUser, updateUserDetails } from '../../store/features/users/usersActions';
+import React, { FC, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { Box, Typography } from '@mui/material';
-import { ACCESS_PERMISSION } from '../../constants';
-import { User } from '../../store/features/users/usersSlice';
 import { ButtonUI, MultipleSelect, TextFieldUI } from '../ui';
+import {Post} from "../../store/features/posts/postsSlice";
+import {createPost, updatePostDetails} from "../../store/features/posts/postsActions";
 
 interface IAddUserFormProps {
   handleClose: () => void;
   editMode?: boolean;
-  user?: User;
+  data?: any;
 }
 
 type Errors = {
-  name: string;
-  email: string;
-  permissions: string;
-  image: string | null;
+  username?: string;
+  title?: string;
+  body?: string;
 }
 
-export const AddUserForm: FC<IAddUserFormProps> = ({ handleClose, editMode = false, user }) => {
+export const AddUserForm: FC<IAddUserFormProps> = ({ handleClose, editMode = false, data }) => {
   const dispatch = useAppDispatch();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [permissions, setPermissions] = useState<string[]>([]);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [username, setUsername] = useState('');
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
   const [errors, setErrors] = useState<Errors>();
 
   useEffect(() => {
-    if (editMode && user) {
-      setName(user.name);
-      setEmail(user.email);
-      setPermissions(user.permissions);
-      setPreviewImage(user.image);
+    if (editMode && data) {
+      setUsername(data.username)
+      setTitle(data.title);
+      setBody(data.body);
     }
-  }, [editMode, user]);
+  }, [editMode, data]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     let formIsValid = true;
     const newErrors: Errors = {
-      name: '',
-      email: '',
-      permissions: '',
-      image: null
+      username: '',
+      title: '',
+      body: '',
     };
 
-    if (!name) {
+    if (!username) {
       formIsValid = false;
-      newErrors.name = 'Заполните имя';
+      newErrors.username = 'Заполните поле';
     }
 
-    if (!email) {
+    if (!title) {
       formIsValid = false;
-      newErrors.email = 'Заполните почту';
+      newErrors.title = 'Заполните поле';
+    }
+
+    if (!body) {
+      formIsValid = false;
+      newErrors.body = 'Заполните поле';
     } 
-    else if (!/\S+@\S+\.\S+/.test(email)) {
-      formIsValid = false;
-      newErrors.email = 'Некорректный формат почты';
-    }
-
-    if (permissions.length === 0) {
-      formIsValid = false;
-      newErrors.permissions = 'Выберите роль';
-    }
-
-    if (previewImage === null) {
-      formIsValid = false;
-      newErrors.image = 'Выберите фото';
-    }
 
     if (formIsValid) {
-      const userData = {
-        name,
-        email,
-        permissions,
-        image: previewImage || '',
+      const postData = {
+        username,
+        title,
+        body,
       };
 
-      if (editMode && user) {
-        dispatch(updateUserDetails({ id: user.id, ...userData }));
+      if (editMode && data) {
+        dispatch(updatePostDetails({ id: data.id, ...postData }));
       } else {
-        dispatch(createUser(userData));
+        dispatch(createPost(postData));
       }
 
-      setName('');
-      setEmail('');
-      setPermissions([]);
+      setUsername('')
+      setTitle('');
+      setBody('');
       setErrors(undefined);
       handleClose();
     } else {
       setErrors(newErrors);
-    }
-  };
-
-  const onChange = (options: string[]) => {
-    setPermissions(options);
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setPreviewImage(null);
     }
   };
 
@@ -121,37 +89,27 @@ export const AddUserForm: FC<IAddUserFormProps> = ({ handleClose, editMode = fal
         <TextFieldUI
           type="text"
           placeholder="Имя"
-          value={name}
-          disabled={editMode}
-          onChange={e => setName(e.target.value)}
-          error={!!errors?.name}
-          helperText={errors?.name}
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          error={!!errors?.username}
+          helperText={errors?.username}
         />
         <TextFieldUI
-          type="email"
-          placeholder="Почта"
-          value={email}
-          disabled={editMode}
-          onChange={e => setEmail(e.target.value)}
-          error={!!errors?.email}
-          helperText={errors?.email}
+          type="text"
+          placeholder="Название"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          error={!!errors?.title}
+          helperText={errors?.title}
         />
-        <MultipleSelect
-          label="Выберите права доступа"
-          value={permissions}
-          options={ACCESS_PERMISSION}
-          onChange={onChange}
-          error={!!errors?.permissions}
+        <TextFieldUI
+          type="text"
+          placeholder="Описание"
+          value={body}
+          onChange={e => setBody(e.target.value)}
+          error={!!errors?.body}
+          helperText={errors?.body}
         />
-        {errors?.permissions && <Typography ml={2} color="red" fontSize={12}>{errors.permissions}</Typography>}
-        <TextFieldUI 
-          type="file" 
-          disabled={editMode}
-          onChange={handleImageChange} 
-          error={!!errors?.image}
-          helperText={errors?.image}
-        />
-        {previewImage && <img src={previewImage} alt="Preview" style={{ objectFit: 'contain' }} height={250} />}
         <ButtonUI
           type="submit"
           variant="contained" 

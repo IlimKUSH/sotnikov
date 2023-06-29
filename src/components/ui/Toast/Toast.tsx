@@ -4,7 +4,7 @@ import { ButtonUI } from "../Button";
 
 const style = {
     position: 'absolute',
-    width: 400,
+    width: 500,
     top: '50%',
     left: '50%',
     padding: 30,
@@ -20,19 +20,15 @@ interface IToastUIProps {
     open: boolean;
     children?: ReactNode;
     onClose: () => void;
+    onOk: () => void;
 }
 
-export const ToastUI: FC<IToastUIProps> = ({ title, open, onClose }) => {
+export const ToastUI: FC<IToastUIProps> = ({ title, open, onClose, onOk }) => {
   const [visible, setVisible] = useState(open);
 
   useEffect(() => {
     if (open) {
       setVisible(true);
-      const timer = setTimeout(() => {
-        onClose();
-    }, 3000);
-
-    return () => clearTimeout(timer);
     } else {
       setVisible(false);
     }
@@ -42,6 +38,11 @@ export const ToastUI: FC<IToastUIProps> = ({ title, open, onClose }) => {
     setVisible(false);
     onClose();
   };
+
+  const handleOkModal = () => {
+    onOk();
+    onClose();
+  }
 
   return (
     <Modal
@@ -55,9 +56,14 @@ export const ToastUI: FC<IToastUIProps> = ({ title, open, onClose }) => {
         <Typography textAlign="center"  variant="h6" fontWeight={600} id="modal-title" mb={2}>
           {title}
         </Typography>
-        <ButtonUI variant="contained" color="secondary" fullWidth onClick={onClose}>
-          Закрыть
-        </ButtonUI>
+        <Box sx={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '10px' }}>
+          <ButtonUI variant="contained" color="error" onClick={handleOkModal}>
+            Удалить
+          </ButtonUI>
+          <ButtonUI variant="contained" color="secondary" onClick={onClose}>
+            Закрыть
+          </ButtonUI>
+        </Box>
       </Box>
     </Modal>
   )

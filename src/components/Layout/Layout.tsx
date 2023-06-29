@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 import { Box, styled } from '@mui/material';
-import { Sidebar, drawerWidth } from '../Sidebar';
+import {Header} from "../Header";
 
 
 const DashboardLayoutRoot = styled('div')(({ theme }) => ({
@@ -10,7 +10,6 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
   // maxWidth: '100%',
   // paddingTop: 64,
   [theme.breakpoints.up('lg')]: {
-    marginLeft: drawerWidth,
     paddingTop: 0,
   },
 
@@ -21,9 +20,10 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
 
 export const Layout: FC<PropsWithChildren> = (props) => {
   return (
-    <Box maxWidth={'1440px'} margin={'0 auto'} overflow={'hidden'}>
-      <Sidebar />
+    <>
+      <Header />
 
+      <Box maxWidth={'1440px'} margin={'0 auto'} overflow={'hidden'}>
       <DashboardLayoutRoot>
         <Box
           sx={{
@@ -37,6 +37,7 @@ export const Layout: FC<PropsWithChildren> = (props) => {
           {props.children}
         </Box>
       </DashboardLayoutRoot>
-    </Box>
+      </Box>
+    </>
   );
 };
